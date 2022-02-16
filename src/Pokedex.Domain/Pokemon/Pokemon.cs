@@ -10,13 +10,13 @@ public class Pokemon : Entity<PokemonNumber>, IAggregateRoot
     public string? Avatar { get; private set; }
     public PhysicalAttributes? PhysicalAttributes { get; private set; }
     public GenderRatio? GenderRatio { get; private set; }
-    public PokemonType PrimaryType { get; set; }
-    public PokemonType? SecondaryType { get; set; }
-    public BaseStats BaseStats { get; set; }
-    public PokemonNumber? EvolvesToNumber { get; set; }
+    public PokemonType PrimaryType { get; private set; }
+    public PokemonType? SecondaryType { get; private set; }
+    public BaseStats BaseStats { get; private set; }
+    public PokemonNumber? EvolvesToNumber { get; private set; }
 
-    public virtual Pokemon? EvolvesTo { get; set; }
-    public virtual ICollection<Pokemon>? EvolvesFrom { get; set; }
+    public virtual Pokemon? EvolvesTo { get; }
+    public virtual IReadOnlyCollection<Pokemon>? EvolvesFrom { get; }
 
     private static bool _canEvolve { get; set; }
 
@@ -41,12 +41,18 @@ public class Pokemon : Entity<PokemonNumber>, IAggregateRoot
         Name = data.Name;
         CatchRate = data.CatchRate;
         IsLegendary = data.IsLegendary;
-        Avatar = data.Avatar;        
-        PhysicalAttributes = PhysicalAttributes.From(data.Height, data.Weigth);
-        GenderRatio = GenderRatio.From(data.MaleRatio, data.FemaleRatio);
-        PrimaryType = PokemonType.From(data.PrimaryType);
-        SecondaryType = PokemonType.From(data.SecondaryType);
-        BaseStats = BaseStats.From(data);        
+        Avatar = data.Avatar;
+
+        PhysicalAttributes = PhysicalAttributes
+            .From(data.Height, data.Weigth);
+        GenderRatio = GenderRatio
+            .From(data.MaleRatio, data.FemaleRatio);
+        PrimaryType = PokemonType
+            .From(data.PrimaryType);
+        BaseStats = BaseStats.From(data);
+
+        if (data.SecondaryType is not null)
+            SecondaryType = PokemonType.From(data.SecondaryType);        
     }
 
     private static void ValidatePokemonData(PokemonData data)

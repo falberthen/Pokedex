@@ -43,10 +43,8 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .SetIsOriginAllowed(origin => true));
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapGraphQL();
-});
+app.UseEndpoints(endpoints => 
+    endpoints.MapGraphQL("/"));
 
 app.UseHttpsRedirection();
 app.Run();

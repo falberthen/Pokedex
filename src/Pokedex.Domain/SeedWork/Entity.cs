@@ -30,6 +30,6 @@ public abstract class Entity<TKey>
 
     public override int GetHashCode()
     {
-        return (GetType().ToString() + Number).GetHashCode();
+        return HashCode.Combine(this.GetType(), Number);
     }
 }
