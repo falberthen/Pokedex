@@ -1,16 +1,49 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div class="header-logo"><img src="./assets/pokedex-logo.png" /></div>
+  <div v-for="queryResult in result" :key="queryResult.number">    
+    <MainDevice :pokemon="queryResult" @goUp="goUp" @goLeft="goLeft" @goRight="goRight" @goDown="goDown"/> 
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { defineComponent, reactive } from 'vue';
+import { useQuery } from '@vue/apollo-composable'
+import { pokemonByNumber } from './graphql/queries';
+import PokemonDto from '@/models/pokemon';
+import MainDevice from './components/MainDevice.vue';
+
+const variables = reactive({
+  number: 1,
+})
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    MainDevice
+  },
+  methods: {
+    goUp(evolutionNumber: number) {
+      variables.number = evolutionNumber;
+    },
+    goLeft() {
+      variables.number > 1 
+        ? variables.number-- : 1;
+    },
+    goRight() {
+      variables.number++;
+    },
+    goDown(preEvolutions: PokemonDto[]) {  
+      variables.number = preEvolutions[0].number;
+    },
+  },
+  setup() {
+    const { result, loading, error } = 
+      useQuery(pokemonByNumber, variables);   
+      return {
+        result,
+        loading, 
+        error
+      }
   }
 });
 </script>
@@ -23,5 +56,8 @@ export default defineComponent({
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.header-logo {
+  margin:30px;
 }
 </style>
