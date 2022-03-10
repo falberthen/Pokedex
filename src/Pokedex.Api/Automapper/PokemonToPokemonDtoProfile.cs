@@ -13,7 +13,7 @@ public class PokemonToPokemonDtoProfile : Profile
                 g => g.MapFrom(src => src.PrimaryType.Name))
             .ForMember(t => t.SecondaryType,
                 g => g.MapFrom(src => src.SecondaryType == null 
-                    ? "None" : src.PrimaryType.Name));
+                    ? "None" : src.SecondaryType.Name));
 
         CreateMap<PhysicalAttributes, PhysicalAttributesDto>();
         CreateMap<GenderRatio, GenderRatioDto>();
