@@ -1,29 +1,51 @@
 <template>
   <div class="device-container">
-    <div @click="goUp" class="joystick-button goUpButton"/>
-    <div @click="goLeft" class="joystick-button goLeftButton"/>
-    <div @click="goRight" class="joystick-button goRightButton"/>
-    <div @click="goDown" class="joystick-button goDownButton"/>
-    <AvatarDisplay :pokemon="pokemon"/>
+    <div @click="goUp" class="joystick-button goUpButton" title="Evolutions" alt="Evolutions"/>
+    <div @click="goLeft" class="joystick-button goLeftButton" title="Go back" alt="Go back"/>
+    <div @click="goRight" class="joystick-button goRightButton" title="Go forward" alt="Go forward"/>
+    <div @click="goDown" class="joystick-button goDownButton" title="Pre evolutions" alt="Pre evolutions"/>
+    
+    <AvatarDisplay 
+      :avatar="pokemon?.avatar" 
+      :name="pokemon?.name"/>
+
+    <TypeDisplay 
+      :primaryType="pokemon?.primaryType" 
+      :secondaryType="pokemon?.secondaryType"/>
+      
     <StatsDisplay :pokemon="pokemon" />
+
+    <PhysicalAttributesDisplay 
+      :weigth="pokemon?.physicalAttributes?.weigth" 
+      :height="pokemon?.physicalAttributes?.height"/>
+
+    <GenderRatioDisplay 
+      :maleRatio="pokemon?.genderRatio.maleRatio" 
+      :femaleRatio="pokemon?.genderRatio.femaleRatio"/>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import PokemonDto from '@/models/pokemon';
 import AvatarDisplay from './AvatarDisplay.vue';
 import StatsDisplay from './StatsDisplay.vue';
+import TypeDisplay from './TypeDisplay.vue';
+import PhysicalAttributesDisplay from './AttributesDisplay.vue';
+import GenderRatioDisplay from './GenderRatioDisplay.vue';
+import PokemonDto from '@/models/PokemonDto';
 
 export default defineComponent({
   name: 'MainDevice',
   emits: ['goUp','goLeft','goRight','goDown'],
   components: {
     AvatarDisplay,
-    StatsDisplay
+    StatsDisplay,
+    TypeDisplay,
+    PhysicalAttributesDisplay,
+    GenderRatioDisplay
   },
   props: {
-    pokemon: PokemonDto
+    pokemon!: Object as () => PokemonDto
   },
   methods: {
     goUp() {
@@ -39,7 +61,8 @@ export default defineComponent({
       this.$emit('goRight');
     },
     goDown() {
-      if(this.pokemon && this.pokemon?.evolvesFrom?.length > 0) {
+      if(this.pokemon && 
+      this.pokemon?.evolvesFrom?.length > 0) {
         this.$emit('goDown',        
           this.pokemon?.evolvesFrom);
       }
@@ -64,20 +87,20 @@ export default defineComponent({
     cursor: pointer;
   }
   .goUpButton {
-    top: 530px;
-    left: 365px;
+    bottom: 20%;
+    left: 36%;
   }
   .goLeftButton {
-    top: 580px;
-    left: 325px;
+    bottom: 15%;
+    left: 32%;
   }
   .goRightButton {
-    top: 570px;
-    left: 405px;
+    bottom: 15%;
+    left: 40%; 
   }
   .goDownButton {
-    top: 615px;
-    left: 370px;
+    bottom: 10%;
+    left: 36%;
   }
 }
 </style>

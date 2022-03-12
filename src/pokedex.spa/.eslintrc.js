@@ -3,13 +3,18 @@ module.exports = {
   env: {
     node: true
   },
-  'extends': [
+  plugins: [
+    '@typescript-eslint',
+  ],
+  extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/typescript/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 2020,
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

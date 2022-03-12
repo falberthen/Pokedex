@@ -1,15 +1,13 @@
 <template>
   <div class="header-logo"><img src="./assets/pokedex-logo.png" /></div>
-  <div v-for="queryResult in result" :key="queryResult.number">    
-    <MainDevice :pokemon="queryResult" @goUp="goUp" @goLeft="goLeft" @goRight="goRight" @goDown="goDown"/> 
-  </div>
+  <MainDevice :pokemon="pokemonDto" @goUp="goUp" @goLeft="goLeft" @goRight="goRight" @goDown="goDown"/> 
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
-import { useQuery } from '@vue/apollo-composable'
+import { useQuery, useResult } from '@vue/apollo-composable'
 import { pokemonByNumber } from './graphql/queries';
-import PokemonDto from '@/models/pokemon';
+import PokemonDto from '@/models/PokemonDto';
 import MainDevice from './components/MainDevice.vue';
 
 const variables = reactive({
@@ -29,28 +27,39 @@ export default defineComponent({
       variables.number > 1 
         ? variables.number-- : 1;
     },
-    goRight() {
+    goRight() {       
       variables.number++;
     },
     goDown(preEvolutions: PokemonDto[]) {  
       variables.number = preEvolutions[0].number;
     },
   },
+  watch: {
+    error: function (errorValue: unknown) {
+      console.log(errorValue);
+      variables.number = 1;
+    },
+  },
   setup() {
     const { result, loading, error } = 
-      useQuery(pokemonByNumber, variables);   
-      return {
-        result,
-        loading, 
-        error
-      }
+      useQuery(pokemonByNumber, variables);
+
+    const pokemonDto = useResult(result, null, (data) => {
+      return data.pokemonByNumber;
+    });
+
+    return {
+      pokemonDto,
+      loading, 
+      error
+    }
   }
 });
 </script>
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Lucida Sans Unicode';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -60,4 +69,5 @@ export default defineComponent({
 .header-logo {
   margin:30px;
 }
+
 </style>
