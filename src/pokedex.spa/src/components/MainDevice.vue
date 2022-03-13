@@ -9,6 +9,9 @@
       :avatar="pokemon?.avatar" 
       :name="pokemon?.name"/>
 
+    <LegendaryDisplay 
+      :avatar="pokemon?.isLegendary"/>
+
     <TypeDisplay 
       :primaryType="pokemon?.primaryType" 
       :secondaryType="pokemon?.secondaryType"/>
@@ -32,6 +35,7 @@ import StatsDisplay from './StatsDisplay.vue';
 import TypeDisplay from './TypeDisplay.vue';
 import PhysicalAttributesDisplay from './AttributesDisplay.vue';
 import GenderRatioDisplay from './GenderRatioDisplay.vue';
+import LegendaryDisplay from './LegendaryDisplay.vue';
 import PokemonDto from '@/models/PokemonDto';
 
 export default defineComponent({
@@ -42,7 +46,8 @@ export default defineComponent({
     StatsDisplay,
     TypeDisplay,
     PhysicalAttributesDisplay,
-    GenderRatioDisplay
+    GenderRatioDisplay,
+    LegendaryDisplay
   },
   props: {
     pokemon!: Object as () => PokemonDto
@@ -82,7 +87,7 @@ export default defineComponent({
   
   .joystick-button {
     position: absolute;
-    width:50px;
+    width: 50px;
     height: 50px;
     cursor: pointer;
   }

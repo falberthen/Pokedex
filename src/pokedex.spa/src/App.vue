@@ -1,14 +1,32 @@
 <template>
-  <div class="header-logo"><img src="./assets/pokedex-logo.png" /></div>
-  <MainDevice :pokemon="pokemonDto" @goUp="goUp" @goLeft="goLeft" @goRight="goRight" @goDown="goDown"/> 
+  <div class="header-logo"><img src="./assets/pokedex-logo.png" /></div>  
+  <SearchBox 
+    :currentPokemonNumber="currentPokemonNumber"
+    @setPokemonByNumber="setPokemonByNumber"/>
+
+  <MainDevice 
+    :pokemon="pokemonByNumberResult" 
+    @goUp="goUp" 
+    @goLeft="goLeft" 
+    @goRight="goRight" 
+    @goDown="goDown"/>
+  
+  <SubscriptionListener    
+    :onInsertPokemonResult="onInsertPokemonResult" 
+    :onUpdatePokemonResult="onUpdatePokemonResult" 
+    :onListPokemonResult="onListPokemonResult" 
+    @setPokemonByNumber="setPokemonByNumber"/>  
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, useSubscription } from '@vue/apollo-composable'
 import { pokemonByNumber } from './graphql/queries';
+import { onInsertPokemon, onUpdatePokemon, onListPokemon } from './graphql/subscriptions';
 import PokemonDto from '@/models/PokemonDto';
 import MainDevice from './components/MainDevice.vue';
+import SubscriptionListener from './components/SubscriptionListener.vue';
+import SearchBox from './components/SearchBox.vue';
 
 const variables = reactive({
   number: 1,
@@ -17,7 +35,9 @@ const variables = reactive({
 export default defineComponent({
   name: 'App',
   components: {
-    MainDevice
+    MainDevice,
+    SubscriptionListener,
+    SearchBox
   },
   methods: {
     goUp(evolutionNumber: number) {
@@ -33,6 +53,14 @@ export default defineComponent({
     goDown(preEvolutions: PokemonDto[]) {  
       variables.number = preEvolutions[0].number;
     },
+    setPokemonByNumber(pokemonNumber: number) {      
+      variables.number = pokemonNumber;
+    }
+  },
+  computed: {
+    currentPokemonNumber(): number {
+      return variables.number;
+    }
   },
   watch: {
     error: function (errorValue: unknown) {
@@ -44,14 +72,37 @@ export default defineComponent({
     const { result, loading, error } = 
       useQuery(pokemonByNumber, variables);
 
-    const pokemonDto = useResult(result, null, (data) => {
+    //Subscriptions
+    const useOnInsertPokemon = 
+      useSubscription(onInsertPokemon);
+    const useOnUpdatePokemon = 
+      useSubscription(onUpdatePokemon);
+    const useOnListPokemon = 
+      useSubscription(onListPokemon);
+
+    const pokemonByNumberResult = useResult(result, null, (data) => {
       return data.pokemonByNumber;
     });
 
-    return {
-      pokemonDto,
+    const onListPokemonResult = useResult(useOnListPokemon.result, null, (data) => {
+      return data.onListPokemon;
+    });
+
+    const onInsertPokemonResult = useResult(useOnInsertPokemon.result, null, (data) => {
+      return data.onInsertPokemon;
+    });
+
+    const onUpdatePokemonResult = useResult(useOnUpdatePokemon.result, null, (data) => {      
+      return data.onUpdatePokemon;
+    });
+
+    return {      
       loading, 
-      error
+      error,
+      pokemonByNumberResult,
+      onListPokemonResult,
+      onInsertPokemonResult,
+      onUpdatePokemonResult
     }
   }
 });
@@ -69,5 +120,4 @@ export default defineComponent({
 .header-logo {
   margin:30px;
 }
-
 </style>

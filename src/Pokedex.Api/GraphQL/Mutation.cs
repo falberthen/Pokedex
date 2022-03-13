@@ -20,10 +20,12 @@ public class Mutation
         await pokemonRepository
             .InsertPokemon(pokemon);
 
-        await eventSender
-            .SendAsync("PokemonInserted", pokemon);
+        var dto = _mapper.Map<PokemonDto>(pokemon);
 
-        return _mapper.Map<PokemonDto>(pokemon);
+        await eventSender
+            .SendAsync("PokemonInserted", dto);
+
+        return dto;
     }
 
     public async Task<PokemonDto> UpdatePokemon(PokemonData input, [Service] IEvolutionChecker checker,
@@ -37,9 +39,11 @@ public class Mutation
         await pokemonRepository
             .UpdatePokemon(pokemon);
 
-        await eventSender
-            .SendAsync("PokemonUpdated", pokemon);
+        var dto = _mapper.Map<PokemonDto>(pokemon);
 
-        return _mapper.Map<PokemonDto>(pokemon);
+        await eventSender
+            .SendAsync("PokemonUpdated", dto);
+
+        return dto;
     }
 }

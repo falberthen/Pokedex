@@ -14,18 +14,18 @@ public class Subscription
     }
 
     [SubscribeAndResolve]
-    public async ValueTask<ISourceStream<Pokemon>> OnInsertPokemon([Service]ITopicEventReceiver eventReceiver,
+    public async ValueTask<ISourceStream<PokemonDto>> OnInsertPokemon([Service]ITopicEventReceiver eventReceiver,
         CancellationToken cancellationToken)
     {
         return await eventReceiver
-            .SubscribeAsync<string, Pokemon>("PokemonInserted", cancellationToken);
+            .SubscribeAsync<string, PokemonDto>("PokemonInserted", cancellationToken);
     }
 
     [SubscribeAndResolve]
-    public async ValueTask<ISourceStream<Pokemon>> OnUpdatePokemon([Service]ITopicEventReceiver eventReceiver,
+    public async ValueTask<ISourceStream<PokemonDto>> OnUpdatePokemon([Service]ITopicEventReceiver eventReceiver,
         CancellationToken cancellationToken)
     {
         return await eventReceiver
-            .SubscribeAsync<string, Pokemon>("PokemonUpdated", cancellationToken);
+            .SubscribeAsync<string, PokemonDto>("PokemonUpdated", cancellationToken);
     }
 }

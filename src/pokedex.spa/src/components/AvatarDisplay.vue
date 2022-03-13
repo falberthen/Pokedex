@@ -1,6 +1,6 @@
 <template>
-  <div class="avatar-display">
-    <img :src="avatar" class="avatar-container" v-if="avatar" :title="name">
+  <div class="avatar-container">
+    <img :src="avatar" class="avatar-display" :title="name" v-if="avatar">
   </div>  
 </template>
 
@@ -17,14 +17,14 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.avatar-display {  
+.avatar-container {  
   position: absolute;
   top: 26.5%;
   left: 18%;
   width:25%;
   height: 32%;
 
-  .avatar-container {
+  .avatar-display {
     width: 230px;
     height: 230px;
   }
