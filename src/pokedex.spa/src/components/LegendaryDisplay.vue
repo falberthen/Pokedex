@@ -10,12 +10,12 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'LegendaryDisplay',
   props: {
-    isLegendary!: Boolean
+    isLegendary: Boolean
   },
   computed:{
     legendary(): string {
       return this.isLegendary 
-        ? "Legendary!" : "";
+        ? "Legendary" : "";
     }
   }
 })
@@ -24,12 +24,13 @@ export default defineComponent({
 <style scoped lang="scss">
 .legendary-container {  
   position: absolute;
-  top: 25%;
-  left: 22%;
+  top: 26%;
+  left: 28%;
   width:20%;
+  height: 30px;
 
   .is-legendary-display {
-    color:green;
+    color:rgb(195, 186, 52);
     font-weight: bolder;
   }
 }

@@ -4,13 +4,12 @@
     <div @click="goLeft" class="joystick-button goLeftButton" title="Go back" alt="Go back"/>
     <div @click="goRight" class="joystick-button goRightButton" title="Go forward" alt="Go forward"/>
     <div @click="goDown" class="joystick-button goDownButton" title="Pre evolutions" alt="Pre evolutions"/>
-    
     <AvatarDisplay 
       :avatar="pokemon?.avatar" 
       :name="pokemon?.name"/>
 
     <LegendaryDisplay 
-      :avatar="pokemon?.isLegendary"/>
+      :isLegendary="pokemon?.isLegendary"/>
 
     <TypeDisplay 
       :primaryType="pokemon?.primaryType" 
