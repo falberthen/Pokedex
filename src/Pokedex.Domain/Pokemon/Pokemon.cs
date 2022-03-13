@@ -58,13 +58,13 @@ public class Pokemon : Entity<PokemonNumber>, IAggregateRoot
     private static void ValidatePokemonData(PokemonData data)
     {
         if (data == null)
-            throw new DomainRuleException(nameof(data));
+            throw new DomainException(nameof(data));
 
         if (data.Number <= 0)
-            throw new DomainRuleException("Pokemon's number must be valid.");
+            throw new DomainException("Pokemon's number must be valid.");
 
         if (string.IsNullOrWhiteSpace(data.Name))
-            throw new DomainRuleException("Pokemon's name cannot be null or whitespace.");
+            throw new DomainException("Pokemon's name cannot be null or whitespace.");
     }
 
     private Pokemon(PokemonData data)
