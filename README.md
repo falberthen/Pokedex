@@ -1,3 +1,6 @@
+![Build](https://github.com/falberthen/pokedex/actions/workflows/pokedex.yml/badge.svg)
+[![License](https://img.shields.io/github/license/falberthen/pokedex.svg)](LICENSE)
+
 # Pokédex - .NET, GraphQL, and Vue
 
 <p align="center">
